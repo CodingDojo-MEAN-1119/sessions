@@ -32,7 +32,7 @@ for (let index = 0; index < array.length; index++) {
 const person = {
   name: 'Bob',
   'hair': 'brown',
-  "eyes": 'blue',
+  'eye-color': 'blue',
   age: 45,
   key: 'this is key'
 };
@@ -49,16 +49,53 @@ person.height = 5.6;
 //   console.log('key is ' + key, person[key]);
 // }
 
-
 function sayHello(name) {
   console.log('Hello ' + person.name);
+
+  var cat = 'cat';
 
   person.name = name;
 }
 
-// sayHello('Jason');
+sayHello('Jason');
+// console.log(cat);
+
 
 
 
 
 console.log(person);
+
+
+function counter() {
+  var count = 0;
+
+  function childScope() {
+    return ++count;
+  }
+
+  return childScope;
+}
+
+counter = counter();
+
+console.log(counter());
+// 1
+
+console.log(counter());
+// 2
+
+console.log(counter());
+// 3
+
+console.log(counter());
+// 4
+
+console.log(counter());
+console.log(counter());
+console.log(counter());
+console.log(counter());
+console.log(counter());
+console.log(counter());
+console.log(counter());
+
