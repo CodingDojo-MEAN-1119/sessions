@@ -58,7 +58,7 @@ function map(array, callback) {
   for (let index = 0; index < array.length; index++) {
     const currentValue = array[index];
     // const value = currentValue * currentValue;
-    const value = callback(currentValue);
+    const value = callback(currentValue, index, array);
 
     console.log(currentValue, value);
     result.push(value);
@@ -68,13 +68,51 @@ function map(array, callback) {
   return result;
 }
 
-console.log('square', map(values, function (element) {
-  console.log('inside map function', element * element);
 
-  return element * element;
-}));
+function square(number) {
+  return number * number;
+}
 
 
-console.log('addtwo', map(values, function (value) {
-  return value + 2;
-}));
+// console.log('square', map(values, square));
+
+
+// console.log('addtwo', map(values, (value, index) => value + 2 + index));
+
+
+// console.log('before');
+
+
+// function sayHello() {
+//   setTimeout(function () {
+//     console.log('hellos');
+//   }, 1000);
+// }
+
+// sayHello();
+
+// console.log('after');
+
+
+function getThingsFromDB(query, callback) {
+
+  console.log('got query', query);
+
+  return setTimeout(function () {
+    const data = ['thing 1', 'thing 2', 'thing3'];
+
+    console.log('callback', callback);
+    console.log('things running ', data);
+
+    callback(data);
+  }, 1000);
+
+}
+
+
+getThingsFromDB('select * from things;', function (things) {
+  console.log('inside anon async func', things);
+  for (const thing of things) {
+    console.log(`got a thing!!! ${thing}`);
+  }
+});
