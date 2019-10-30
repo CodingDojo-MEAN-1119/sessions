@@ -1,27 +1,69 @@
-function orderSupplies(item, callback) {
+function orderSupplies(item) {
   let warehouse; //undefined
   const deliveryTime = Math.random() * 3000;
+  console.log('ordered', item);
 
-  setTimeout(function () {
-    warehouse = {
-      paint: {
-        product: 'Neon Green Paint',
-        directions: function () { return 'mix it!' }
-      },
-      brush: {
-        product: 'Horsehair brush',
-        directions: function () { return 'start painting!' }
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      console.log('filling ', item);
+      warehouse = {
+        paint: {
+          product: 'Neon Green Paint',
+          directions: function () { return 'mix it!' }
+        },
+        brush: {
+          product: 'Horsehair brush',
+          directions: function () { return 'start painting!' }
+        },
+        tarp: {
+          product: 'A Large Tarp',
+          directions: () => 'cover the floor!'
+        }
+      };
+
+      if (item in warehouse) {
+        resolve(warehouse[item]);
+      } else {
+        reject(new Error(`${item} is out of stock`));
       }
-    };
 
-    callback(warehouse[item]);
-  }, deliveryTime);
+    }, deliveryTime);
+  });
 }
 
 function receivedItem(item) {
   console.log(`Received ${item.product}, time to ${item.directions()}`);
 }
 
+
+const paint = orderSupplies('paint');
+const tarp = orderSupplies('tarp');
+const brush = orderSupplies('brush');
+// const roller = orderSupplies('roller')
+
+
+// tarp
+//   .then(receivedItem)
+//   .then(() => paint)
+//   .then(receivedItem)
+//   .then(() => brush)
+//   .then(receivedItem)
+//   .then(() => roller)
+//   .then(receivedItem)
+
+//   .catch(handleError);
+
+
+Promise.all([tarp, paint, brush])
+  .then(items => {
+    items.forEach(receivedItem);
+  })
+  .catch(handleError);
+
+
+function handleError(error) {
+  console.log(error.message);
+}
 /**
  * Possible Output:
  *
@@ -87,6 +129,8 @@ const orders = ['paint', 'brush'];
 function orderHelper(items) {
   const results = [];
 
+  let ordersReceived = 0;
+
   for (let index = 0; index < items.length; index++) {
     const item = items[index];
 
@@ -96,8 +140,9 @@ function orderHelper(items) {
 
       results[index] = product;
       console.log(product, results, index);
+      ordersReceived++;
       // console.log(results.filter(p => p).length);
-      if (results.filter(p => p).length === items.length) {
+      if (ordersReceived === items.length) {
         // loop & print every
 
         results.forEach(receivedItem);
@@ -106,4 +151,29 @@ function orderHelper(items) {
   }
 }
 
-orderHelper(orders);
+// orderHelper(orders);
+
+// const paint = new Promise(function (resolve, reject) {
+//   // console.log(resolve, reject);
+//   orderSupplies('paint', resolve)
+// });
+// const brush = new Promise(function (resolve, reject) {
+//   // console.log(resolve, reject);
+//   orderSupplies('brush', resolve)
+// });
+
+// const tarp = new Promise(function (resolve, reject) {
+//   // console.log(resolve, reject);
+//   orderSupplies('tarp', resolve)
+// });
+
+// tarp
+//   .then(receivedItem)
+//   .then(() => paint)
+//   .then(receivedItem)
+//   .then(() => brush)
+//   .then(receivedItem)
+//   .catch(console.log);
+
+
+
