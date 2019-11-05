@@ -32,7 +32,13 @@
           <tr>
             <td><a href="/authors/<%= author._id %>"><%= author.name %></a></td>
             <td><%= author.age %></td>
-            <td><%= author.books %></td>
+            <td>
+              <ul>
+                <% for(const book of author.books) { %>
+                  <li><%= book.title %></li>
+                <% } %>
+              </ul>
+            </td>
             <td><%= author.isAlive %></td>
             <td>Future Actions</td>
           </tr>

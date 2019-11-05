@@ -77,6 +77,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/authors', function (_request, response) {
   Author.find({})
+    .populate('books')
     .then(authors => {
       console.log('all authors', authors);
       response.render('authors/index', { authors });
@@ -84,7 +85,9 @@ app.get('/authors', function (_request, response) {
 });
 
 app.get('/authors/new', function (_request, response) {
-  response.render('authors/new');
+  const author = new Author();
+
+  response.render('authors/new', { author });
 });
 
 app.post('/authors', function (request, response) {
@@ -104,11 +107,62 @@ app.post('/authors', function (request, response) {
       response.redirect('/authors');
     })
     .catch(error => {
+      console.log(error);
       const errors = Object.keys(error.errors).map(key => error.errors[key].message);
+      console.log('author create failed', errors);
 
-      response.render('authors/new', { errors });
+      const isAlive = request.body.isAlive === 'true';
+      const author = { ...request.body, isAlive };
+
+      console.log('author is ', author);
+      response.render('authors/new', { errors, author: author });
     });
 });
 
+
+app.get('/books', function (_request, response) {
+  Book.find({})
+    .populate('author')
+    .then(books => response.render('books/index', { books }))
+    .catch(error => {
+      console.log(error);
+      response.redirect('/');
+    });
+});
+
+app.get('/books/new', function (_request, response) {
+  Author.find({})
+    .then(authors => {
+      response.render('books/new', { authors: authors });
+
+    }).catch(error => {
+      console.log(error);
+
+      response.redirect('/');
+    })
+});
+
+app.post('/books', function (request, response) {
+  console.log('creating book', request.body);
+  Book.create(request.body)
+    .then(book => {
+      console.log(book);
+
+      return Author.findById(book.author)
+        .then(author => {
+          author.books.push(book);
+
+          return author.save();
+        })
+        .then(() => {
+          response.redirect('/books');
+        });
+    })
+    .catch(error => {
+      const errors = Object.keys(error.errors).map(key => error.errors[key].message);
+
+      response.render('books/new', { errors });
+    });
+});
 
 app.listen(port, () => console.log(`Express server listening on port ${port}`));
