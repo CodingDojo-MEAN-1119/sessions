@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BOOKS } from '../../data/book.data';
 import { Book } from '../../models/book';
+
+import { BookService } from '../../services';
+// import { BookService } from '../../services/book.service';
 
 @Component({
   selector: 'app-book-list',
@@ -9,12 +11,17 @@ import { Book } from '../../models/book';
   styleUrls: ['./book-list.component.css'],
 })
 export class BookListComponent implements OnInit {
-  books: Book[] = BOOKS;
+  books: Book[] = [];
   selectedBook: Book;
 
-  constructor() {}
+  constructor(private bookService: BookService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.bookService.getBooks().subscribe(books => {
+      console.log('books?', books, this);
+      this.books = books;
+    });
+  }
 
   onSelect(book: Book) {
     console.log('selecting book', book);
@@ -32,6 +39,8 @@ export class BookListComponent implements OnInit {
   onCreate(book: Book) {
     console.log('creating book', book);
 
-    this.books.push(book);
+    this.bookService
+      .createBook(book)
+      .subscribe(createdBook => this.books.push(createdBook));
   }
 }
