@@ -9,8 +9,8 @@ import { Book } from '../models/book';
   providedIn: 'root',
 })
 export class BookService {
-  private baseUrl = 'http://59498bce6d49df0011102cfc.mockapi.io/books';
-  // private baseUrl = '/books';
+  // private baseUrl = 'http://59498bce6d49df0011102cfc.mockapi.io/books';
+  private baseUrl = '/books';
 
   constructor(private http: HttpClient) {}
 
@@ -30,10 +30,10 @@ export class BookService {
   }
 
   updateBook(book: Book): Observable<Book> {
-    return this.http.put<Book>(`${this.baseUrl}/${book.id}`, book);
+    return this.http.put<Book>(`${this.baseUrl}/${book._id}`, book);
   }
 
-  removeBook(bookId: number): Observable<Book> {
+  removeBook(bookId: string): Observable<Book> {
     return this.http.delete<Book>(`${this.baseUrl}/${bookId}`);
   }
 }

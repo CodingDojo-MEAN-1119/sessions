@@ -51,11 +51,11 @@ export class BookListComponent implements OnInit {
 
   onDelete(book: Book): void {
     console.log('deleting book', book);
-    this.bookService.removeBook(book.id).subscribe(deletedBook => {
+    this.bookService.removeBook(book._id).subscribe(deletedBook => {
       console.log('deleted book', deletedBook);
 
       this.books = this.books.filter(
-        currentBook => currentBook.id !== deletedBook.id,
+        currentBook => currentBook._id !== deletedBook._id,
       );
     });
   }
