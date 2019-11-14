@@ -1,7 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { Book } from '../../models/book';
 import { NgForm } from '@angular/forms';
+
+import { BookService } from '../../services';
 
 @Component({
   selector: 'app-book-new',
@@ -14,7 +17,7 @@ export class BookNewComponent implements OnInit {
   @Output()
   createBook = new EventEmitter<Book>();
 
-  constructor() {}
+  constructor(private bookService: BookService, private router: Router) {}
 
   ngOnInit() {}
 
@@ -22,11 +25,17 @@ export class BookNewComponent implements OnInit {
     event.preventDefault();
 
     // this.books.push(this.book);
-    this.createBook.emit(this.book);
 
-    this.book = new Book();
+    this.bookService.createBook(this.book).subscribe(createdBook => {
+      console.log(createdBook);
+      this.book = new Book();
+      form.reset();
 
-    form.reset();
+      // this.router.navigate(['/']);
+      this.router.navigateByUrl('/');
+    });
+    // this.createBook.emit(this.book);
+
     // console.log(`running on submit`, this.books);
   }
 }

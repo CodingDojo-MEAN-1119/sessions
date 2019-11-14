@@ -9,6 +9,7 @@ import { BookService } from '../../services';
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookListComponent implements OnInit {
   books: Book[] = [];
@@ -41,6 +42,26 @@ export class BookListComponent implements OnInit {
 
     this.bookService
       .createBook(book)
-      .subscribe(createdBook => this.books.push(createdBook));
+      .subscribe(createdBook => (this.books = [...this.books, createdBook]));
+  }
+
+  onEnter(book: Book) {
+    // console.log(`mouse has entered book with title ${book.title}`);
+  }
+
+  onDelete(book: Book): void {
+    console.log('deleting book', book);
+    this.bookService.removeBook(book.id).subscribe(deletedBook => {
+      console.log('deleted book', deletedBook);
+
+      this.books = this.books.filter(
+        currentBook => currentBook.id !== deletedBook.id,
+      );
+    });
+  }
+
+  onEvent(event: Event) {
+    console.log('eventing');
+    event.stopPropagation();
   }
 }

@@ -10,6 +10,7 @@ import { Book } from '../models/book';
 })
 export class BookService {
   private baseUrl = 'http://59498bce6d49df0011102cfc.mockapi.io/books';
+  // private baseUrl = '/books';
 
   constructor(private http: HttpClient) {}
 
@@ -22,5 +23,17 @@ export class BookService {
 
   createBook(book: Book): Observable<Book> {
     return this.http.post<Book>(this.baseUrl, book);
+  }
+
+  getBook(bookId: string): Observable<Book> {
+    return this.http.get<Book>(`${this.baseUrl}/${bookId}`);
+  }
+
+  updateBook(book: Book): Observable<Book> {
+    return this.http.put<Book>(`${this.baseUrl}/${book.id}`, book);
+  }
+
+  removeBook(bookId: number): Observable<Book> {
+    return this.http.delete<Book>(`${this.baseUrl}/${bookId}`);
   }
 }

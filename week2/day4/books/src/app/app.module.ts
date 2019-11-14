@@ -3,19 +3,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BookListComponent } from './books/book-list/book-list.component';
-import { BookNewComponent } from './books/book-new/book-new.component';
-import { BookDetailComponent } from './books/book-detail/book-detail.component';
+
+import * as fromBooks from './books';
+import { NavComponent } from './nav/nav.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BookListComponent,
-    BookNewComponent,
-    BookDetailComponent,
-  ],
-  imports: [BrowserModule, FormsModule, HttpClientModule],
+  declarations: [AppComponent, ...fromBooks.components, NavComponent, NotFoundComponent],
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],
 })
