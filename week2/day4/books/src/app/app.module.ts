@@ -11,7 +11,12 @@ import { NavComponent } from './nav/nav.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
-  declarations: [AppComponent, ...fromBooks.components, NavComponent, NotFoundComponent],
+  declarations: [
+    AppComponent,
+    ...fromBooks.components,
+    NavComponent,
+    NotFoundComponent,
+  ],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],

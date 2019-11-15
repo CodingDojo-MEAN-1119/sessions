@@ -30,6 +30,10 @@ const routes: Routes = [
         path: ':id',
         component: fromBooks.BookDetailComponent,
       },
+      {
+        path: ':id/edit',
+        component: fromBooks.BookEditComponent,
+      },
     ],
   },
   {

@@ -10,7 +10,7 @@ import { Book } from '../models/book';
 })
 export class BookService {
   // private baseUrl = 'http://59498bce6d49df0011102cfc.mockapi.io/books';
-  private baseUrl = '/books';
+  private baseUrl = '/api/books';
 
   constructor(private http: HttpClient) {}
 
